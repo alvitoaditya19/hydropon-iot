@@ -1,6 +1,10 @@
 import "../styles/globals.css";
 import "../styles/app.css";
 import "../styles/dashboard.css";
+import "../styles/sign-in.css";
+import "../styles/utilities.css";
+import "../styles/home.css";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

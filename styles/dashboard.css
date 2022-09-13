@@ -1,8 +1,36 @@
-
-
+table {
+  border-spacing: 4px;
+  border-collapse:separate;
+}
 .dashboard {
   background: #f8f9fd;
   margin: 0;
+}
+
+.dashboard .summary-card{
+  background-color: #F4F7FF;
+  padding: 1.875rem;
+  border-radius: 1rem;
+}
+
+.dashboard .summary-card .summary-title{
+  color: #1A1640;
+}
+
+.dashboard .summary-card .summary-total{
+  color: #828EA5;
+  font-size:16px;
+}
+
+.dashboard .summary-card .summary-total-title{
+  color: #1A1640;
+  font-size:32px;
+}
+
+.table-data{
+  background-color:#F8F9FD;
+  border-radius:16px;
+  padding: 20px 30px;
 }
 
 .navbar-toggler-icon {
@@ -76,14 +104,14 @@
 
 .header {
   display: flex;
-  margin-bottom: 26px;
+  /* margin-bottom: 26px; */
   flex-direction: column;
   justify-content: space-between;
 }
 
 .header h3 {
   margin: 0;
-  color: #0d1458;
+  color: #1A1640;
   font-weight: 700;
   line-height: 42px;
 }
@@ -91,6 +119,7 @@
 .header p {
   color: #828ea5;
   font-size: 16px;
+  margin-bottom:4px;
 }
 
 .search-bar-profile {
@@ -132,110 +161,8 @@
   border: 1px solid #1531D1;
 }
 
-.information .card {
-  border: none;
-  width: 340px;
-  height: 240px;
-  padding: 30px;
-  border-radius: 30px;
-  box-sizing: border-box;
-}
-
-.debit {
-  background-image: url("/images/bg_card.png");
-  color: #fff;
-  display: flex;
-  background-size: cover;
-  background-color: #1531D1;
-  justify-content: space-between;
-  box-shadow: rgba(53, 71, 172, 0.5) 0px 20px 50px 0px;
-}
-
-.debit .number {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 17%;
-}
-
-.debit .name {
-  margin: 0;
-  font-weight: 500;
-}
-
-.debit .valid {
-  margin: 0;
-  font-weight: 300;
-}
-
-.balance,
-.donut-chart {
-  display: flex;
-  align-items: center;
-  background-color: #f8f9fd;
-  justify-content: space-between;
-}
-
-.balance p {
-  margin: 0;
-  color: #0d1458;
-  font-weight: 600;
-}
-
-.balance h2 {
-  margin: 0;
-  color: #1531D1;
-  font-weight: 700;
-}
-
-.balance div {
-  color: #5fbb9e;
-  padding: 6px 12px;
-  border-radius: 10px;
-  background-color: #d6f9ee;
-}
-
-.information h5 {
-  color: #0d1458;
-  font-weight: 600;
-  margin-bottom: 30px;
-}
-
-.transaction .icon-history {
-  width: 70px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  border-radius: 20px;
-  justify-content: center;
-  background-color: #f8f9fd;
-}
-
-.transaction .trans-history {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.transaction .title {
-  color: #0d1458;
-  font-weight: 600;
-}
-
-.transaction .date {
-  color: #0d1458;
-  font-weight: 400;
-}
-
-.transaction .outcome {
-  font-weight: 500;
-  color: #f12f2f;
-}
-
-.transaction .income {
-  font-weight: 500;
-  color: #1531D1;
+.main-content{
+  margin:50px 0px;
 }
 
 @media (max-width: 1024px) {
@@ -246,7 +173,7 @@
 
 @media (max-width: 480px) {
   .content {
-    padding: 40px 16px;
+    padding: 40px 4px;
   }
   .search {
     width: 280px;
@@ -349,4 +276,136 @@
 .profile-pictures {
   background: none;
   border: 0px;
+}
+
+@media (max-width: 1024px) {
+  .main-content{
+    margin:30px 0px;
+  }
+}
+
+.header .card-monitoring{
+  background-color:#4D17E2;
+  padding:8px 10px;
+  border-radius:16px;
+  margin-top:16px;
+}
+
+.header .card-monitoring .card-body h1{
+  font-size: 18px;
+  color:#ffffff;
+  margin-bottom:12px;
+
+}
+
+.header .card-monitoring .card-body .data-value{
+  font-size: 24px;
+  color:#ffffff;
+  margin-bottom:3px;
+  font-weight:600px;
+ 
+}
+
+.header .card-monitoring .card-body .data-unit{
+  font-size: 16px;
+  color:#ffffff;
+ 
+}
+
+.header .control-feature{
+  margin-top:0px;
+}
+@media (max-width: 1024px) {
+  .header .control-feature{
+    margin-top:32px;
+  }
+}
+
+/* USER DASHBOARD */
+
+.table>:not(caption)>*>* {
+  vertical-align: middle;
+}
+
+.user-card{
+  padding:6px 8px;
+  background: #4D17E2;
+  color:#fff;
+  border-radius:100px;
+}
+.user-card h1{
+  font-size: 16px;
+  text-align: center;
+  margin:0px;
+}
+
+.admin-card{
+  padding:6px 8px;
+
+  background: #32E04D;
+  color:#fff;
+  border-radius:100px;
+}
+
+.admin-card h1{
+  font-size: 16px;
+  text-align: center;
+  margin:0px;
+}
+
+.btn-edit-user {
+  padding:6px 24px;
+  font-size: 16px;
+  text-decoration:none;
+  background: #ECE31A;
+  color:#fff;
+  border-radius:100px;
+  margin-right:12px;
+}
+
+.btn-edit-user:hover {
+  color:#fff;
+}
+
+.btn-delete-user {
+  padding:6px 24px;
+  font-size: 16px;
+  text-decoration:none;
+  background: #EA2F15;
+  border:0px;
+  color:#fff;
+  border-radius:100px;
+}
+
+.btn-delete-user:hover {
+  color:#fff;
+}
+
+
+@media (max-width: 1024px) {
+  .admin-card h1{
+    font-size: 14px;
+  }
+
+  .user-card h1{
+    font-size: 14px;
+  }
+  .btn-edit-user {
+    font-size: 14px;
+  }
+  .btn-delete-user {
+    font-size: 14px;
+  }
+}
+
+/* Edit User */
+.form-data-user{
+  border-radius:16px;
+  padding:30px;
+  background-color:#F8F9FD;
+}
+
+.form-user-control{
+  border-width:3;
+  border-color :#0D1458;
 }

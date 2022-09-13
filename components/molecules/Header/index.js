@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function Header({toggleNavbar}) {
+export default function Header({ toggleNavbar, filterBySearch, isFilter }) {
+  const [filter, setFilter] = useState(false)
   return (
     <>
       <nav className="navbar navbar-expand-lg">
@@ -17,6 +18,7 @@ export default function Header({toggleNavbar}) {
               type="text"
               placeholder="Search report or product"
               className="search form-control"
+              onChange={filterBySearch}
             />
 
             <button
