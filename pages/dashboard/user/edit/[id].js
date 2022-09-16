@@ -1,21 +1,23 @@
-import jwt_decode from "jwt-decode";
-import { useEffect, useState } from "react";
-import bcrypt from 'bcryptjs'
+// alt + shift + O
+
+import { useRouter } from "next/router";
+import { useState } from "react";
+import Select from "react-select";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { sentenceCase } from "sentence-case";
 import { Header, Sidebar } from "../../../../components";
-import { getDataUser, getDetailUser } from "../../../../services/dashboard";
-import Select from 'react-select'
-import { data } from "jquery";
+import {
+  getDataUser,
+  getDetailUser,
+  SetEditUser,
+} from "../../../../services/dashboard";
 
-export default function DetailEdit({dataUser}) {
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [Status, setStatus] = useState('');
-
-  const [selectedOption, setSelectedOption] = useState();
-
+export default function DetailEdit({ dataUser }) {
+  const [name, setName] = useState(dataUser.name);
+  const [email, setEmail] = useState(dataUser.email);
+  const [username, setUsername] = useState(dataUser.username);
+  const [status, setStatus] = useState(dataUser.status);
 
   const [toggleViewMode, setToggleViewMode] = useState(false);
   const toggleNavbar = () => {
@@ -23,19 +25,47 @@ export default function DetailEdit({dataUser}) {
   };
 
   const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
+    { value: "admin", label: "Admin" },
+    { value: "user", label: "User" },
   ];
 
-  const selectedStatus = () => {
-    const dataStatus = dataUser.status;
-    // setSelectedOption(dataStatus);
-  }
-
   const handleChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
-  }
+    setStatus(selectedOption.value);
+  };
+  const router = useRouter();
+
+  const onSubmit = async () => {
+    const data = {
+      name: name,
+      email: email,
+      username: username,
+      status: status,
+    };
+
+    const response = await SetEditUser(data, dataUser._id);
+    if (response.error) {
+      toast.error(response.message);
+    } else {
+      toast.success("Berhasil Edit Data User");
+
+      router.push("/dashboard/user");
+    }
+  };
+  const colourStyles = {
+    menuList: (styles) => ({
+      ...styles,
+      background: "#ffffff",
+    }),
+    option: (styles, { isFocused, isSelected }) => ({
+      ...styles,
+      background: isSelected ? "#4D17E2" : undefined,
+      zIndex: 1,
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 100,
+    }),
+  };
 
   return (
     <>
@@ -52,7 +82,7 @@ export default function DetailEdit({dataUser}) {
           {/* <input id="search-box" onChange={filterBySearch} /> */}
           <section className="p-3">
             <div className="header">
-              <h3>Add User</h3>
+              <h3>Edit User</h3>
               <p>Manage data for growth</p>
             </div>
           </section>
@@ -67,8 +97,8 @@ export default function DetailEdit({dataUser}) {
               <input
                 type="text"
                 className="form-control text-lg form-user-control"
-                // placeholder="Enter your email address"
-                placeholder={dataUser.name}               
+                value={name}
+                onChange={(event) => setName(event.target.value)}
               />
             </div>
             <div className="form-label-input mt-30">
@@ -81,8 +111,8 @@ export default function DetailEdit({dataUser}) {
               <input
                 type="email"
                 className="form-control text-lg form-user-control"
-                placeholder={dataUser.email}
-
+                value={dataUser.email}
+                disabled
               />
             </div>
             <div className="form-label-input  mt-30">
@@ -95,7 +125,8 @@ export default function DetailEdit({dataUser}) {
               <input
                 type="text"
                 className="form-control text-lg form-user-control"
-                placeholder={dataUser.username}
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </div>
             <div className="form-label-input  mt-30">
@@ -105,17 +136,26 @@ export default function DetailEdit({dataUser}) {
               >
                 Status
               </label>
-              <Select        defaultValue={selectedOption}
-        onChange={setSelectedOption} options={options} className="form-label"/>
-
+              <Select
+                styles={colourStyles}
+                value={{
+                  value: status,
+                  label: sentenceCase(status),
+                }} // default value must be like this./You forgot pass this  parameter
+                onChange={handleChange}
+                options={options}
+                className="form-user-control"
+              />
             </div>
-            <Select
-        hideSelectedOptions={false}
-        defaultValue={{ value: 'chocolate', label: 'Chocolate' }} // default value must be like this.
-        value={selectedOption} //You forgot pass this  parameter
-        onChange={handleChange}
-        options={options}
-      />
+            <div className="mt-30 d-flex flex-row-reverse">
+              <button
+                type="button"
+                className="btn fw-medium text-lg color-pallete-1 text-white"
+                onClick={onSubmit}
+              >
+                Edit User
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -24,7 +24,8 @@
     "react-svg": "^15.1.7",
     "react-toastify": "^9.0.8",
     "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "sentence-case": "^3.0.4"
   },
   "devDependencies": {
     "eslint": "8.23.0",

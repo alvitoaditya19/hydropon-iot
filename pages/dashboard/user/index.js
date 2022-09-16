@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
-import { Header, Sidebar } from "../../../components";
-import ReactLoading from "react-loading";
 import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import ReactLoading from "react-loading";
+import ReactPaginate from "react-paginate";
+import { Header, Sidebar } from "../../../components";
 import { DestroyUser, getDataUser } from "../../../services/dashboard";
 
 export default function User() {
@@ -15,6 +15,7 @@ export default function User() {
   const [items, setItems] = useState([]);
 
   const [pageCount, setpageCount] = useState(0);
+  
 
   let limit = 10;
   let no = 0;
@@ -79,11 +80,11 @@ export default function User() {
       });
   };
 
-  const deleteUser = async(id) => {
+  const deleteUser = async (id) => {
     DestroyUser(id);
     const user = await getDataUser();
-    setItems(user)
-  }
+    setItems(user);
+  };
   return (
     <>
       {/* Navbar */}
@@ -95,7 +96,7 @@ export default function User() {
         />
         {/* Main Content */}
         <div className="content">
-          <Header toggleNavbar={toggleNavbar} filterBySearch={filterBySearch} />
+          <Header toggleNavbar={toggleNavbar} filterBySearch={filterBySearch} isFilter/>
           {/* <input id="search-box" onChange={filterBySearch} /> */}
           <section className="p-3">
             <div className="header">
@@ -103,6 +104,14 @@ export default function User() {
               <p>Manage data for growth</p>
             </div>
           </section>
+          <section className=" mb-20">
+            <div className="container-fluid gap-2">
+            <Link href="/dashboard/user/add-user">
+              <div className="btn color-pallete-1 border-0 text-white">Add User</div>
+            </Link>
+            </div>
+          </section>
+
           <div className="row m-2 justify-content-center">
             {isLoading ? (
               <ReactLoading
@@ -150,7 +159,10 @@ export default function User() {
                               <a className="btn-edit-user">Edit</a>
                             </Link>
 
-                            <button onClick={()=>deleteUser(item._id)}  className="btn-delete-user">
+                            <button
+                              onClick={() => deleteUser(item._id)}
+                              className="btn-delete-user"
+                            >
                               Delete
                             </button>
                           </td>

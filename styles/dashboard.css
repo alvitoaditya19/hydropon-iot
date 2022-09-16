@@ -146,7 +146,6 @@ table {
   height: 40px;
   color: #000000;
   position: absolute;
-  margin-right: 70px;
   border-radius: 50px;
   background-color: #dce2f4;
 }
@@ -315,6 +314,31 @@ table {
 .header .control-feature{
   margin-top:0px;
 }
+
+.card-control{
+  background-color:#4D17E2;
+  border-radius:16px;
+  margin-top:16px;
+}
+
+ .card-control .card-body h1{
+  font-size: 22px;
+  color:#ffffff;
+  margin-top:4px;
+}
+
+.card-control-off{
+  background-color:#F4F7FF;
+  border-radius:16px;
+  margin-top:16px;
+}
+
+ .card-control-off .card-body h1{
+  font-size: 22px;
+  color:#4D17E2;
+  margin-top:4px;
+}
+
 @media (max-width: 1024px) {
   .header .control-feature{
     margin-top:32px;
@@ -395,6 +419,7 @@ table {
   }
   .btn-delete-user {
     font-size: 14px;
+    margin-top:10px;
   }
 }
 

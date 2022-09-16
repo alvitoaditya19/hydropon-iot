@@ -4,6 +4,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
+button.btn-control { background: unset !important;
+    border: unset !important;
+    outline: unset !important; }
+
 /* Container */
 /* .container-fluid {
     padding-right: 16px;
@@ -32,6 +36,11 @@
         padding-left: 100px;
     }
  } */
+
+ .color-pallete-1{
+    background-color:#4D17E2;
+
+ }
 
 @media (min-width: 1400px){
     .container-xxl{

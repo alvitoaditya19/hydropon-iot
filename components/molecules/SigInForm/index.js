@@ -57,6 +57,7 @@ export default function SignInForm() {
         </label>
         <input
           type="email"
+        
           className="form-control rounded-pill text-lg"
           placeholder="Enter your email address"
           value={email}
