@@ -6,8 +6,12 @@ export default function Sidebar({ toggleViewMode, activeMenu }) {
       <div className={toggleViewMode ? "sidebar active" : "sidebar"}>
         <div className="d-flex justify-content-center py-5">
           {/* <img src="/images/logo.svg" alt="Logo" width="140px" height="40px" /> */}
-          <img src="/images/ic_iot_act.svg" alt="Logo" width="180px" height="60px" />
-
+          <img
+            src="/images/ic_iot_act.svg"
+            alt="Logo"
+            width="180px"
+            height="60px"
+          />
         </div>
         <div className="pt-2 d-flex flex-column gap-5">
           <div className="menu">
@@ -24,7 +28,12 @@ export default function Sidebar({ toggleViewMode, activeMenu }) {
               href="/dashboard/user"
               active={activeMenu == "user"}
             />
-
+            <SidebarItem
+              icon="icon ic-user"
+              title="Temperature"
+              href="/dashboard/temperature"
+              active={activeMenu == "temperature"}
+            />
           </div>
           <div className="menu">
             <p>Others</p>

@@ -1,20 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { CardMonitor, Header, Sidebar, SummaryCard } from "../../components";
 import { IcLampAct, IcLampInact, IcParameter } from "../../public/Icon";
-import { GetLamp, SetLamp } from "../../services/dashboard";
+import { GetLamp, GetTemperature, SetLamp } from "../../services/dashboard";
+import ReactLoading from "react-loading";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import next from "next";
 
 export default function Dashboard() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [toggleViewMode, setToggleViewMode] = useState(false);
   const [lamp1, setDataLamp1] = useState(false);
   const [dataLamp2, setDataLamp2] = useState(false);
+
+  const [temperature, setTemperature] = useState([]);
 
   const toggleNavbar = () => {
     setToggleViewMode(!toggleViewMode);
   };
   var lampuStatus = lamp1;
+  const WAIT_TIME = 5000;
 
   const submitLamp1 = async () => {
     const data = {
@@ -42,7 +48,6 @@ export default function Dashboard() {
   };
   const getStatusLamp1 = useCallback(async () => {
     const data = await GetLamp();
-    console.log("formasi", data.data.lamp1);
 
     if (data.data.lamp1 == "ON") {
       setDataLamp1(true);
@@ -50,9 +55,30 @@ export default function Dashboard() {
       setDataLamp1(false);
     }
   }, [GetLamp]);
+
+  const getValueTemperature = useCallback(async () => {
+    setIsLoading(false);
+    const data = await GetTemperature();
+    // console.log(data.slice(-1)[0].celcius);
+
+    setTemperature(data.slice(-1)[0].celcius);
+  }, [GetTemperature]);
+
   useEffect(() => {
     getStatusLamp1();
   }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    // getValueTemperature()
+    const id = setInterval(() => {
+
+      getValueTemperature();
+    }, WAIT_TIME);
+
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <>
       {/* Navbar */}
@@ -82,7 +108,7 @@ export default function Dashboard() {
                   <h1 className="text-2xl fw-semibold">Data Monitoring</h1>
                   <p>Manage data for growth</p>
                   <div className="row">
-                    <CardMonitor />
+                    <CardMonitor value={temperature} isLoading={isLoading} />
                     <CardMonitor />
                     <CardMonitor />
                     <CardMonitor />
@@ -94,10 +120,19 @@ export default function Dashboard() {
                   <h1 className="text-2xl fw-semibold">Control Feature</h1>
                   <p>Manage data for growth</p>
                   <div className="row">
-                    <button className="col-lg-4 col-6 btn-control" onClick={submitLamp1}  type="button">
+                    <button
+                      className="col-lg-4 col-6 btn-control"
+                      onClick={submitLamp1}
+                      type="button"
+                    >
                       {/* <div className="col-md-12 card-control"> */}
-                        <div className={lamp1 ? "col-md-12 card-control" : "col-md-12 card-control-off"}>
-
+                      <div
+                        className={
+                          lamp1
+                            ? "col-md-12 card-control"
+                            : "col-md-12 card-control-off"
+                        }
+                      >
                         <div className="card-body text-center">
                           {lamp1 ? <IcLampInact /> : <IcLampAct />}
 

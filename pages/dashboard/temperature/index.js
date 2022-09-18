@@ -1,74 +1,76 @@
 import axios from "axios";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
 import ReactLoading from "react-loading";
 import ReactPaginate from "react-paginate";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Header, Sidebar } from "../../../components";
-import { DestroyUser, getDataUser } from "../../../services/dashboard";
+import { GetAllDataTemperature } from "../../../services/dashboard";
 
-export default function User() {
+export default function Temperature() {
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [toggleViewMode, setToggleViewMode] = useState(false);
   const toggleNavbar = () => {
     setToggleViewMode(!toggleViewMode);
   };
   const [items, setItems] = useState([]);
+  const [allItems, setAllItems] = useState([]);
+
+  const [totalData, setTotalData] = useState(0);
 
   const [pageCount, setpageCount] = useState(0);
-  
 
   let limit = 10;
-  let no = 0;
-  let statusUser = "admin";
 
   useEffect(() => {
     const getComments = async () => {
       setIsLoading(true);
       axios
-        .get(`http://localhost:3000/api/v1/users?limit=${limit}`)
+        .get(`http://localhost:3000/api/v1/temperatures?page=1&limit=${limit}`)
         .then((res) => {
           setIsLoading(false);
-          let data = res.data;
-          // console.log(data);
-          setItems(data.data);
+          let dataTemperature = res.data;
+
+          setpageCount(Math.ceil(dataTemperature.total / limit));
+          setTotalData(dataTemperature.total);
+          setItems(dataTemperature.data);
         })
         .catch((err) => {
           console.log("err get in progress: ", err);
         });
     };
+    const getAllData = async () => {
+      const allDataSuhu = await GetAllDataTemperature();
+      setAllItems(allDataSuhu);
+    };
+
+    getAllData();
 
     getComments();
-  }, [limit]);
+  }, []);
   const fetchComments = async (currentPage) => {
     const res = await fetch(
       // `http://localhost:3004/comments?_page=${currentPage}&_limit=${limit}`
-      `http://localhost:3000/api/v1/users/?limit=${limit}`
+      // `http://localhost:3000/api/v1/temperatures?limit=${limit}`
+      `http://localhost:3000/api/v1/temperatures?page=${currentPage}&limit=${limit}`
     );
     const data = await res.json();
-    return data;
+    return data.data;
   };
 
   const handlePageClick = async (data) => {
-    // console.log(data.selected);
-
     let currentPage = data.selected + 1;
-
     const commentsFormServer = await fetchComments(currentPage);
-
     setItems(commentsFormServer);
-    // scroll to the top
-    //window.scrollTo(0, 0)
   };
 
   const filterBySearch = (event) => {
-    // Access input value
     const query = event.target.value;
-    // Create copy of item list
     axios
-      .get(`http://localhost:3000/api/v1/users/?limit=${limit}`)
+      .get(`http://localhost:3000/api/v1/temperatures?limit=${limit}`)
       .then((res) => {
-        console.log("DATAAA: ", res.data.data);
         let updatedList = [...res.data.data];
         // Include all elements which includes the search query
         updatedList = updatedList.filter((item) => {
@@ -80,12 +82,8 @@ export default function User() {
         setItems(updatedList);
       });
   };
+  const notifyDownload = () => toast.success("Berhasil download data Suhu");
 
-  const deleteUser = async (id) => {
-    DestroyUser(id);
-    const user = await getDataUser();
-    setItems(user);
-  };
   return (
     <>
       {/* Navbar */}
@@ -93,23 +91,37 @@ export default function User() {
         <Sidebar
           toggleViewMode={toggleViewMode}
           toggleNavbar={toggleNavbar}
-          activeMenu="user"
+          activeMenu="temperature"
         />
         {/* Main Content */}
         <div className="content">
-          <Header toggleNavbar={toggleNavbar} filterBySearch={filterBySearch} isFilter/>
+          <Header
+            toggleNavbar={toggleNavbar}
+            filterBySearch={filterBySearch}
+            isFilter
+          />
           {/* <input id="search-box" onChange={filterBySearch} /> */}
           <section className="p-3">
             <div className="header">
-              <h3>User</h3>
-              <p>Manage data for growth</p>
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h3>Temperature</h3>
+                  <p>Manage data for growth</p>
+                </div>
+                <h3>Total : {totalData}</h3>
+              </div>
             </div>
           </section>
           <section className=" mb-20">
             <div className="container-fluid gap-2">
-            <Link href="/dashboard/user/add-user">
-              <div className="btn color-pallete-1 border-0 text-white">Add User</div>
-            </Link>
+              <CSVLink
+                data={allItems}
+                className="btn color-pallete-1 border-0 text-white"
+                filename={"Temperature-data.csv"}
+                onClick={notifyDownload}
+              >
+                Download Data CSV
+              </CSVLink>
             </div>
           </section>
 
@@ -128,45 +140,21 @@ export default function User() {
                   <thead>
                     <tr>
                       <th scope="col">No</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Username</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Action</th>
+                      <th scope="col">Celcius</th>
+                      <th scope="col">Humidity</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Date</th>
                     </tr>
                   </thead>
-
                   <tbody>
                     {items.map((item) => {
                       return (
-                        <tr key={item._id} className="align-items-center">
-                          <td>{(no = no + 1)}</td>
-                          <td>{item.email}</td>
-                          <td>{item.name}</td>
-                          <td>{item.username}</td>
-                          <td>
-                            {item.status === "admin" ? (
-                              <div className="admin-card">
-                                <h1>Admin</h1>
-                              </div>
-                            ) : (
-                              <div className="user-card">
-                                <h1>User</h1>
-                              </div>
-                            )}
-                          </td>
-                          <td>
-                            <Link href={`/dashboard/user/edit/${item._id}`}>
-                              <a className="btn-edit-user">Edit</a>
-                            </Link>
-
-                            <button
-                              onClick={() => deleteUser(item._id)}
-                              className="btn-delete-user"
-                            >
-                              Delete
-                            </button>
-                          </td>
+                        <tr key={item.id} className="align-items-center">
+                          {item.id}
+                          <td>{item.celcius}</td>
+                          <td>{item.humidity}</td>
+                          <td>{item.time}</td>
+                          <td>{item.date}</td>
                         </tr>
                       );
                     })}
@@ -174,21 +162,6 @@ export default function User() {
                 </table>
               </div>
             )}
-            {/* {items.map((item) => {
-          return (
-            <div key={item.id} className="col-sm-6 col-md-4 v my-2">
-              <div className="card shadow-sm w-100" style={{ minHeight: 225 }}>
-                <div className="card-body">
-                  <h5 className="card-title text-center h2">Id :{item.id} </h5>
-                  <h6 className="card-subtitle mb-2 text-muted text-center">
-                    {item.email}
-                  </h6>
-                  <p className="card-text">{item.body}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })} */}
           </div>
 
           <ReactPaginate

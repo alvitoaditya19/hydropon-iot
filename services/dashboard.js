@@ -51,13 +51,13 @@ export async function SetEditUser(data,id) {
   });
 }
 
-export async function GetLamp(data) {
+export async function GetLamp() {
   const url = `${ROOT_API}/${API_VERSION}/lamps`;
 
   return callAPI({
     url,
     method: 'GET',
-    data,
+    // data,
   });
 }
 
@@ -69,6 +69,24 @@ export async function SetLamp(data) {
     method: 'PUT',
     data,
   });
+}
+
+export async function GetTemperature() {
+  const URL = `temperatures`;
+
+  const response = await axios.get(`${ROOT_API}/${API_VERSION}/${URL}`);
+  const axiosResponse = response.data;
+
+  return axiosResponse.data;
+}
+
+export async function GetAllDataTemperature() {
+  const URL = `temperatures`;
+
+  const response = await axios.get(`${ROOT_API}/${API_VERSION}/${URL}`);
+  const axiosResponse = response.data;
+
+  return axiosResponse.data;
 }
 
 
